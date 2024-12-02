@@ -20,7 +20,20 @@ CREATE TABLE Claim
  FOREIGN KEY (Claim_Identifier) REFERENCES Claim(Claim_Identifier),
  FOREIGN KEY (Insurable_Object_Identifier) REFERENCES Insurable_Object(Insurable_Object_Identifier),
  FOREIGN KEY (Occurrence_Identifier) REFERENCES Occurrence(Occurrence_Identifier)
-)
+);
+
+
+
+CREATE TABLE Agreement
+( 
+	Agreement_Identifier int  NOT NULL ,
+	Agreement_Name       varchar(100)  NULL ,
+	Agreement_Original_Inception_Date datetime  NULL ,
+	Product_Identifier   int  NULL ,
+	Agreement_Type_Code  varchar(5)  NULL ,
+	 PRIMARY KEY (Agreement_Identifier ASC),
+	 FOREIGN KEY (Product_Identifier) REFERENCES Product(Product_Identifier)
+);
 
 CREATE TABLE Claim_Amount
 ( 
@@ -34,35 +47,35 @@ CREATE TABLE Claim_Amount
 	 PRIMARY KEY (Claim_Amount_Identifier ASC),
 	 FOREIGN KEY (Claim_Offer_Identifier) REFERENCES Claim_Offer(Claim_Offer_Identifier),
  FOREIGN KEY (Claim_Identifier) REFERENCES Claim(Claim_Identifier)
-)
+);
 
 CREATE TABLE Loss_Payment
 ( 
 	Claim_Amount_Identifier bigint  NOT NULL ,
 	 PRIMARY KEY (Claim_Amount_Identifier ASC),
 	 FOREIGN KEY (Claim_Amount_Identifier) REFERENCES Claim_Payment(Claim_Amount_Identifier)
-)
+);
 
 CREATE TABLE Loss_Reserve
 ( 
 	Claim_Amount_Identifier bigint  NOT NULL ,
 	 PRIMARY KEY (Claim_Amount_Identifier ASC),
 	 FOREIGN KEY (Claim_Amount_Identifier) REFERENCES Claim_Reserve(Claim_Amount_Identifier)
-)
+);
 
 CREATE TABLE Expense_Payment
 ( 
 	Claim_Amount_Identifier bigint  NOT NULL ,
 	 PRIMARY KEY (Claim_Amount_Identifier ASC),
 	 FOREIGN KEY (Claim_Amount_Identifier) REFERENCES Claim_Payment(Claim_Amount_Identifier)
-)
+);
 
 CREATE TABLE Expense_Reserve
 ( 
 	Claim_Amount_Identifier bigint  NOT NULL ,
 	 PRIMARY KEY (Claim_Amount_Identifier ASC),
 	 FOREIGN KEY (Claim_Amount_Identifier) REFERENCES Claim_Reserve(Claim_Amount_Identifier)
-)
+);
 
 CREATE TABLE Claim_Coverage
 ( 
@@ -72,7 +85,7 @@ CREATE TABLE Claim_Coverage
 	 PRIMARY KEY (Claim_Identifier ASC,Effective_Date ASC,Policy_Coverage_Detail_Identifier ASC),
 	 FOREIGN KEY (Claim_Identifier) REFERENCES Claim(Claim_Identifier),
  FOREIGN KEY (Effective_Date,Policy_Coverage_Detail_Identifier) REFERENCES Policy_Coverage_Detail(Effective_Date,Policy_Coverage_Detail_Identifier)
-)
+);
 
 CREATE TABLE Policy_Coverage_Detail
 ( 
@@ -89,7 +102,7 @@ CREATE TABLE Policy_Coverage_Detail
 	 FOREIGN KEY (Insurable_Object_Identifier) REFERENCES Insurable_Object(Insurable_Object_Identifier),
  FOREIGN KEY (Coverage_Identifier) REFERENCES Coverage(Coverage_Identifier),
  FOREIGN KEY (Coverage_Part_Code,Policy_Identifier) REFERENCES Policy_Coverage_Part(Coverage_Part_Code,Policy_Identifier)
-)
+);
 
 CREATE TABLE Policy
 ( 
@@ -122,7 +135,7 @@ CREATE TABLE Policy_Amount
  FOREIGN KEY (Policy_Identifier) REFERENCES Policy(Policy_Identifier),
  FOREIGN KEY (Geographic_Location_Identifier) REFERENCES Geographic_Location(Geographic_Location_Identifier),
  FOREIGN KEY (Insurable_Object_Identifier) REFERENCES Insurable_Object(Insurable_Object_Identifier)
-)
+);
 
 CREATE TABLE Agreement_Party_Role
 ( 
@@ -135,14 +148,14 @@ CREATE TABLE Agreement_Party_Role
 	 FOREIGN KEY (Agreement_Identifier) REFERENCES Agreement(Agreement_Identifier),
  FOREIGN KEY (Party_Identifier) REFERENCES Party(Party_Identifier),
  FOREIGN KEY (Party_Role_Code) REFERENCES Party_Role(Party_Role_Code)
-)
+);
 
 CREATE TABLE Premium
 ( 
 	Policy_Amount_Identifier bigint  NOT NULL ,
 	 PRIMARY KEY (Policy_Amount_Identifier ASC),
 	 FOREIGN KEY (Policy_Amount_Identifier) REFERENCES Policy_Amount(Policy_Amount_Identifier)
-)
+);
 
 CREATE TABLE Catastrophe
 ( 
@@ -152,4 +165,23 @@ CREATE TABLE Catastrophe
 	Industry_Catastrophe_Code varchar(20)  NULL ,
 	Company_Catastrophe_Code varchar(20)  NULL ,
 	 PRIMARY KEY (Catastrophe_Identifier ASC)
-)
+);
+
+CREATE TABLE Insurable_Object
+( 
+	Insurable_Object_Identifier int  NOT NULL ,
+	Geographic_Location_Identifier int  NULL ,
+	Insurable_Object_Type_Code varchar(20)  NULL ,
+	 PRIMARY KEY (Insurable_Object_Identifier ASC),
+	 FOREIGN KEY (Geographic_Location_Identifier) REFERENCES Geographic_Location(Geographic_Location_Identifier)
+);
+
+
+CREATE TABLE Agreement_Assessment
+( 
+	Agreement_Identifier int  NOT NULL ,
+	Assessment_Identifier int  NOT NULL ,
+	 PRIMARY KEY (Agreement_Identifier ASC,Assessment_Identifier ASC),
+	 FOREIGN KEY (Agreement_Identifier) REFERENCES Agreement(Agreement_Identifier),
+ FOREIGN KEY (Assessment_Identifier) REFERENCES Assessment(Assessment_Identifier)
+);

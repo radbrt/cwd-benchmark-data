@@ -1,0 +1,7 @@
+openai
+requests
+ipykernel
+python-dotenv
+pandas
+snowflake-sqlalchemy
+marvin
